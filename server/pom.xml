@@ -31,11 +31,35 @@
 	</properties>
 <dependencies>
 
-<!-- Spring Data JPA (includes Hibernate) -->
+	<!-- Spring Data JPA (includes Hibernate) -->
 	<dependency>
     	    <groupId>org.springframework.boot</groupId>
     	    <artifactId>spring-boot-starter-data-jpa</artifactId>
 	</dependency>
+	<dependency>
+    	    <groupId>io.jsonwebtoken</groupId>
+    	    <artifactId>jjwt-api</artifactId>
+    	    <version>0.11.5</version>
+	</dependency>
+	<dependency>
+    	    <groupId>io.jsonwebtoken</groupId>
+    	    <artifactId>jjwt-impl</artifactId>
+    	    <version>0.11.5</version>
+    	    <scope>runtime</scope>
+	</dependency>
+	<dependency>
+    	    <groupId>io.jsonwebtoken</groupId>
+    	    <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson -->
+    	    <version>0.11.5</version>
+    	    <scope>runtime</scope>
+	</dependency>
+
+	<!-- Mail sender -->
+	<dependency>
+    	    <groupId>org.springframework.boot</groupId>
+    	    <artifactId>spring-boot-starter-mail</artifactId>
+	</dependency>
+
 	<!-- PostgreSQL JDBC Driver -->
 	<dependency>
     	    <groupId>org.postgresql</groupId>
@@ -45,7 +69,7 @@
 	<dependency>
     	    <groupId>org.projectlombok</groupId>
     	    <artifactId>lombok</artifactId>
-    	    <version>1.18.30</version> <!-- Use latest version -->
+  	  <version>1.18.30</version> <!-- or latest stable -->
     	    <scope>provided</scope> <!-- Only needed at compile time -->
 	</dependency>
 	<dependency>
@@ -57,10 +81,40 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-web</artifactId>
 	</dependency>
+	<!-- Spring Security -->
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-security</artifactId>
+	</dependency>
 
+		
+    <!-- Spring Data Redis -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+    
+    <!-- Lettuce (Redis client) -->
+    <dependency>
+        <groupId>io.lettuce</groupId>
+        <artifactId>lettuce-core</artifactId>
+    </dependency>	
+	<!-- Spring Boot DevTools -->
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-devtools</artifactId>
+		<scope>runtime</scope>
+		<optional>true</optional>
+	</dependency>
 	<dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-test</artifactId>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.security</groupId>
+		<artifactId>spring-security-test</artifactId>
+    <version>6.1.3</version> <!-- Or latest -->
 		<scope>test</scope>
 	</dependency>
 </dependencies>

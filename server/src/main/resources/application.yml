@@ -1,8 +1,18 @@
+logging:
+  level:
+    org.springframework.boot: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.core.env: DEBUG
 spring:
+  redis:
+    host: redis
+    port: 6379
+    timeout: 5000
   datasource:
-    url: jdbc:postgresql://localhost:54333/mvpdb
-    username: postgres
-    password: postgres
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:54333/mvpdb}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
 
   jpa:
     hibernate:
@@ -11,3 +21,22 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SUPPORT_EMAIL}
+    password: ${APP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+security:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
+    access-expiration: 7200000 # 2 hour in milliseconds
+    refresh-expiration: 1209600000 # 14 days (refresh token)
+

@@ -1,54 +1,83 @@
 package com.example.user;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.refreshToken.RefreshToken;
 import com.example.task.Task;
 
 import jakarta.persistence.*;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Task> tasks = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
 
-  private String name;
-  private String email;
+    @Column(nullable = false, unique = true)
+    private String username;
 
-  public User() {
-  }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<RefreshToken> refreshTokens = new ArrayList<>();
 
-  public User(String name, String email) {
-    this.name = name;
-    this.email = email;
-  }
+    @Column(nullable = false, length = 60)
+    private String name;
 
-  public Long getId() {
-    return id;
-  }
+    @Column(nullable = false, unique = true)
+    private String email;
 
-  public List<Task> getTasks() {
-    return tasks;
-  }
+    @Column(nullable = false)
+    private String password;
 
-  public String getName() {
-    return name;
-  }
+    private boolean enabled;
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    @Column(name = "verification_code")
+    private String verificationCode;
 
-  public String getEmail() {
-    return email;
-  }
+    @Column(name = "verification_expiration")
+    private LocalDateTime verificationExpiration;
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+    // Custom constructor for essential fields
+    public User(String name, String email, String username, String password) {
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 }
