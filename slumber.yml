@@ -1,0 +1,44 @@
+profiles:
+  local:
+    name: Local Development
+    data:
+      host: http://localhost:8080
+      test_email: "simon.muscas@gmail.com"
+      test_password: "password"
+
+chains:
+  login_response: !chain
+    source: !request
+      recipe: login
+    selector: "$.accessToken" # Adjust this path to match your actual response
+
+requests:
+  # User Registration Flow
+  register: !request
+    name: Register New User
+    method: POST
+    url: "{{host}}/auth/signup"
+    body:
+      !json {
+        "name": "Test User",
+        "email": "{{test_email}}",
+        "username": "testuser",
+        "password": "{{test_password}}",
+      }
+
+  # Authentication Flow
+  login: !request
+    name: Login
+    method: POST
+    url: "{{host}}/auth/login"
+    body: !json { "email": "{{test_email}}", "password": "{{test_password}}" }
+
+  # Now you can reference the token like this:
+  protected: !request
+    name: Protected
+    method: GET
+    url: "{{host}}/users/myself"
+    headers:
+      Authorization: "Bearer {{chains.login_response}}"
+
+  # ... rest of your requests ...
